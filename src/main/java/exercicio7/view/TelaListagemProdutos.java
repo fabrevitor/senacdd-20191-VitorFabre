@@ -27,6 +27,10 @@ import exercicio7.model.vo.Produto;
 
 public class TelaListagemProdutos extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2303493275863616847L;
 	private static final String COR_AZUL = "Azul";
 	private static final String COR_AMARELO = "Amarelo";
 	private static final String COR_PRETO = "Preto";
@@ -38,7 +42,7 @@ public class TelaListagemProdutos extends JFrame {
 	private JTable tblProdutos;
 	private JButton btnGerarXls;
 	private JButton btnGerarPdf;
-	private JComboBox cbCor;
+	private JComboBox<String> cbCor;
 	private DatePicker dtInicioCadastro;
 	private DatePicker dtFimCadastro;
 	private int paginaAtual = 1;
@@ -124,7 +128,7 @@ public class TelaListagemProdutos extends JFrame {
 		lblFiltroCor.setBounds(255, 40, 46, 14);
 		contentPane.add(lblFiltroCor);
 
-		cbCor = new JComboBox(cores);
+		cbCor = new JComboBox<String>(cores);
 		cbCor.setBounds(300, 37, 160, 30);
 
 		contentPane.add(cbCor);
