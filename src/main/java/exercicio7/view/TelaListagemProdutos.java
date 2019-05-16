@@ -30,7 +30,10 @@ public class TelaListagemProdutos extends JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2303493275863616847L;
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 	private static final String COR_AZUL = "Azul";
 	private static final String COR_AMARELO = "Amarelo";
 	private static final String COR_PRETO = "Preto";
