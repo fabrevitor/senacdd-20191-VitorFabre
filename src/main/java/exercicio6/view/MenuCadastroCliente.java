@@ -34,7 +34,8 @@ public class MenuCadastroCliente extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public MenuCadastroCliente() {
-		setBounds(100, 100, 244, 270);
+		setTitle("Cadastro Cliente - Java");
+		setBounds(120, 120, 270, 290);
 		getContentPane().setLayout(null);
 
 		JLabel lblNome = new JLabel("Nome:");
@@ -51,16 +52,16 @@ public class MenuCadastroCliente extends JInternalFrame {
 		getContentPane().add(lblCep);
 
 		textFieldCEP = new JTextField();
-		textFieldCEP.setBounds(10, 128, 96, 20);
+		textFieldCEP.setBounds(10, 128, 132, 20);
 		getContentPane().add(textFieldCEP);
 		textFieldCEP.setColumns(10);
 
 		JLabel lblDataNascimento = new JLabel("Data Nascimento:");
-		lblDataNascimento.setBounds(10, 159, 96, 14);
+		lblDataNascimento.setBounds(10, 159, 132, 14);
 		getContentPane().add(lblDataNascimento);
 
 		textFieldDtNasc = new JTextField();
-		textFieldDtNasc.setBounds(10, 180, 96, 20);
+		textFieldDtNasc.setBounds(10, 180, 132, 20);
 		getContentPane().add(textFieldDtNasc);
 		textFieldDtNasc.setColumns(10);
 
@@ -69,11 +70,11 @@ public class MenuCadastroCliente extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnSalvar.setBounds(135, 207, 89, 23);
+		btnSalvar.setBounds(150, 227, 89, 23);
 		getContentPane().add(btnSalvar);
 
 		JLabel lblCadastroDeCliente = new JLabel("Cadastro de Cliente");
-		lblCadastroDeCliente.setBounds(61, 11, 108, 14);
+		lblCadastroDeCliente.setBounds(10, 11, 214, 14);
 		getContentPane().add(lblCadastroDeCliente);
 
 	}
