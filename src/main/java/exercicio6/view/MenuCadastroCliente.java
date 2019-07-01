@@ -34,6 +34,7 @@ public class MenuCadastroCliente extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public MenuCadastroCliente() {
+		setClosable(true);
 		setTitle("Cadastro Cliente - Java");
 		setBounds(120, 120, 270, 290);
 		getContentPane().setLayout(null);
