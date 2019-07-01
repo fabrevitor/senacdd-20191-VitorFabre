@@ -49,14 +49,18 @@ public class TelaListagemProdutos extends JFrame {
 	private DatePicker dtInicioCadastro;
 	private DatePicker dtFimCadastro;
 	private int paginaAtual = 1;
+	private int limitePag = 1;
+	private JButton btnProximo;
+	private JButton btnAnterior;
 
-	// Esta lista de produtos é atualizada a cada nova consulta realizada com os
+	// Esta lista de produtos ï¿½ atualizada a cada nova consulta realizada com os
 	// filtros.
-	// Será a lista usada para gerar os relatórios
+	// Serï¿½ a lista usada para gerar os relatï¿½rios
 	private List<Produto> produtosConsultados;
 	private JTextField txtNome;
 	private JTextField txtPeso;
 	private JLabel lblPaginaAtual;
+	private JLabel lblLimitePag;
 
 	/**
 	 * Launch the application.
@@ -124,7 +128,7 @@ public class TelaListagemProdutos extends JFrame {
 		tblProdutos = new JTable();
 		tblProdutos.setModel(new DefaultTableModel(new String[][] { { "#", "Nome", "Marca", "Peso", "Dt. Cadastro" }, },
 				new String[] { "#", "Nome", "Marca", "Peso", "Dt. Cadastro" }));
-		tblProdutos.setBounds(10, 259, 462, 174);
+		tblProdutos.setBounds(10, 266, 462, 174);
 		contentPane.add(tblProdutos);
 
 		JLabel lblFiltroCor = new JLabel("Cor:");
@@ -152,7 +156,7 @@ public class TelaListagemProdutos extends JFrame {
 		btnGerarXls.setEnabled(false);
 		btnGerarPdf.setEnabled(false);
 
-		JLabel lblPeriodoCadastro = new JLabel("Período de cadastro");
+		JLabel lblPeriodoCadastro = new JLabel("PerÃ­odo de cadastro");
 		lblPeriodoCadastro.setBounds(10, 110, 170, 20);
 		contentPane.add(lblPeriodoCadastro);
 
@@ -164,7 +168,7 @@ public class TelaListagemProdutos extends JFrame {
 		lblDataInicioCadastro.setBounds(10, 140, 61, 16);
 		contentPane.add(lblDataInicioCadastro);
 
-		JLabel lblDataFimCadastro = new JLabel("Até:");
+		JLabel lblDataFimCadastro = new JLabel("AtÃ©:");
 		lblDataFimCadastro.setBounds(10, 170, 61, 16);
 		contentPane.add(lblDataFimCadastro);
 
@@ -186,23 +190,37 @@ public class TelaListagemProdutos extends JFrame {
 		contentPane.add(txtPeso);
 		txtPeso.setColumns(10);
 
-		JButton btnAnterior = new JButton(" < Anterior");
+		btnProximo = new JButton("PrÃ³ximo >");
+		btnAnterior = new JButton(" < Anterior");
+
+		btnAnterior.setEnabled(false);
 		btnAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (paginaAtual > 1) {
 					paginaAtual--;
 				}
 				consultarProdutos();
+
+				if (paginaAtual == 1) {
+					btnAnterior.setEnabled(false);
+				}
+
+				if (paginaAtual != limitePag) {
+					btnProximo.setEnabled(true);
+				}
 			}
 		});
 		btnAnterior.setBounds(80, 457, 110, 23);
 		contentPane.add(btnAnterior);
 
-		JButton btnProximo = new JButton("Próximo >");
 		btnProximo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				paginaAtual++;
 				consultarProdutos();
+				btnAnterior.setEnabled(true);
+				if (paginaAtual == limitePag) {
+					btnProximo.setEnabled(false);
+				}
 			}
 		});
 		btnProximo.setBounds(258, 457, 107, 23);
@@ -210,9 +228,19 @@ public class TelaListagemProdutos extends JFrame {
 
 		lblPaginaAtual = new JLabel("");
 		lblPaginaAtual.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPaginaAtual.setBounds(194, 461, 54, 14);
+		lblPaginaAtual.setBounds(190, 461, 27, 14);
 		lblPaginaAtual.setText(paginaAtual + "");
 		contentPane.add(lblPaginaAtual);
+
+		JLabel lblBarra = new JLabel("/");
+		lblBarra.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBarra.setBounds(213, 461, 27, 14);
+		contentPane.add(lblBarra);
+
+		lblLimitePag = new JLabel("");
+		lblLimitePag.setHorizontalAlignment(SwingConstants.CENTER);
+		lblLimitePag.setBounds(227, 461, 27, 14);
+		contentPane.add(lblLimitePag);
 
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -227,10 +255,23 @@ public class TelaListagemProdutos extends JFrame {
 		ProdutoController controlador = new ProdutoController();
 		ProdutoSeletor seletor = new ProdutoSeletor();
 
-		seletor.setPagina(paginaAtual);
-		seletor.setLimite(5);
+		List<Produto> listaProdutos = controlador.listarProdutos(seletor);
 
-		// Preenche os campos de filtro da tela no seletor
+		seletor.setLimite(2);
+
+		int q = listaProdutos.size() / seletor.getLimite();
+		int r = listaProdutos.size() % seletor.getLimite();
+
+		if (r == 0) {
+			limitePag = q;
+		} else {
+			limitePag = q + 1;
+		}
+
+		lblLimitePag.setText(limitePag + "");
+
+		seletor.setPagina(paginaAtual);
+
 		if (cbCor.getSelectedIndex() > 0) {
 			seletor.setCorProduto(cbCor.getSelectedItem().toString());
 		}
@@ -246,29 +287,20 @@ public class TelaListagemProdutos extends JFrame {
 		seletor.setDataInicioCadastro(dtInicioCadastro.getDate());
 		seletor.setDataFimCadastro(dtFimCadastro.getDate());
 
-		List<Produto> produtos = controlador.listarProdutos(seletor);
-		atualizarTabelaProdutos(produtos);
+		listaProdutos = controlador.listarProdutos(seletor);
+		atualizarTabelaProdutos(listaProdutos);
 
 	}
 
 	protected void atualizarTabelaProdutos(List<Produto> produtos) {
-		// atualiza o atributo produtosConsultados
 		produtosConsultados = produtos;
 
-		// TODO descomentar quando chegarmos em relatórios
-		// btnGerarXls.setEnabled(produtos != null && produtos.size() > 0);
-		// btnGerarPdf.setEnabled(produtos != null && produtos.size() > 0);
-
-		// Limpa a tabela
 		tblProdutos.setModel(new DefaultTableModel(new String[][] { { "#", "Nome", "Marca", "Peso", "Dt. Cadastro" }, },
 				new String[] { "#", "Nome", "Marca", "Peso", "Dt. Cadastro" }));
 
 		DefaultTableModel modelo = (DefaultTableModel) tblProdutos.getModel();
 
 		for (Produto produto : produtos) {
-			// Crio uma nova linha na tabela
-			// Preencher a linha com os atributos do produto
-			// na ORDEM do cabeçalho da tabela
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			String dataFormatada = produto.getDataCadastro().format(formatter);
 
