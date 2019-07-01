@@ -29,8 +29,8 @@ public class Principal extends JFrame {
 	private JDesktopPane desktopPane;
 	private JFrame menuSobre = null;
 	ListagemProduto listagemProduto = null;
-	// ExclusaoProduto exclusaoProduto = null;
-	// AlteracaoProduto alteracaoProduto = null;
+	ExclusaoProduto exclusaoProduto = null;
+	AlteracaoProduto alteracaoProduto = null;
 
 	MenuCadastroCliente menuCadastroCliente = null;
 
@@ -115,12 +115,34 @@ public class Principal extends JFrame {
 		mnProdutos.add(mntmListarProdutos);
 
 		JMenuItem mntmAlterar = new JMenuItem("Alterar");
+		mntmAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (checarTelasAbertas(alteracaoProduto)) {
+				} else {
+					alteracaoProduto = new AlteracaoProduto();
+					desktopPane.add(alteracaoProduto);
+					alteracaoProduto.show();
+				}
+
+			}
+		});
 		mntmAlterar.setIcon(new ImageIcon(
 				Principal.class.getResource("/icones/icons8-\u00E0-esquerda-dentro-de-um-c\u00EDrculo.png")));
 		mntmAlterar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, InputEvent.ALT_MASK));
 		mnProdutos.add(mntmAlterar);
 
 		JMenuItem mntmExcluir = new JMenuItem("Excluir");
+		mntmExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (checarTelasAbertas(exclusaoProduto)) {
+				} else {
+					exclusaoProduto = new ExclusaoProduto();
+					desktopPane.add(exclusaoProduto);
+					exclusaoProduto.show();
+				}
+
+			}
+		});
 		mntmExcluir.setIcon(
 				new ImageIcon(Principal.class.getResource("/icones/icons8-adicionar-usu\u00E1rio-masculino.png")));
 		mntmExcluir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, InputEvent.ALT_MASK));
